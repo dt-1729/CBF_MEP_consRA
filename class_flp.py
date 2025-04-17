@@ -56,12 +56,6 @@ class FLP():
         tiled_th_exp = np.tile(th_exp, (self.N,1))
         return cons, tiled_th_exp
 
-    def get_Li(self, Pi, beta1):
-        G = np.sum(self.rho * self.alloc_C * Pi , axis=0) - self.C
-        exp_G = np.exp(beta1 * (G))
-        Li = exp_G / np.sum(exp_G)
-        return Li, G
-
     def get_PY_gibbs(self, D, beta):
         D_min = D.min(axis=1, keepdims=True)
         exp_beta_D = np.exp(-beta * (D-D_min))
@@ -88,25 +82,6 @@ class FLP():
         # print(Pi[:,0])
         # print(np.sum(rho_Pi, axis=0).reshape(-1,1))
         Yi = np.sum(rho_Pi_X, axis=1)/np.sum(rho_Pi, axis=0).reshape(-1,1)
-        return Pi, Yi
-
-
-    def get_PYL_gibbs(self, D, P, Li, dGdP, beta, beta1):
-        
-        Li_dGdP = (Li @ dGdP).reshape(D.shape)
-        # print(f'Li_dGdP:shape:{Li_dGdP.shape}\n{Li_dGdP}\nmax_val:{Li_dGdP.max()}\n')
-        # print(f'D:shape:{D.shape}\n{D}\nmax_val:{D.max()}\n')
-        D_eff = D - 1/self.rho * beta1/beta * Li_dGdP
-        # print(f'Deff:shape:{D_eff.shape}\n{D_eff}\nmax_val:{D_eff.max()}\n')
-        exp_Deff = np.exp(-beta * (D_eff - D_eff.min(axis=1, keepdims=True)))
-        # print(f'exp_Deff:shape:{exp_Deff.shape}\n{exp_Deff}\nmax_val:{exp_Deff.max()}\n')
-        Pi = exp_Deff / np.sum(exp_Deff, axis=1, keepdims=True)
-        # get Yi
-        Pi_ex = np.expand_dims(Pi.T, axis=2)
-        rho_Pi_X = Pi_ex * (self.resLoc * self.rho)
-        rho_Pi = Pi * self.rho
-        Yi = np.sum(rho_Pi_X, axis=1)/np.sum(rho_Pi, axis=0).reshape(-1,1)
-
         return Pi, Yi
 
     def get_F(self, Y, beta):
@@ -163,36 +138,6 @@ class FLP():
 
         return Pi, Yi
     
-
-    def optimize_DA_C1(self, P0, Y0, beta, b1_min, b1_max, b1_grow, n_iters, D_tol, allowPrint1=False, allowPrint2=False):
-
-        Yi = Y0
-        Pi = P0
-        b1 = b1_min
-        Li, G = self.get_Li(Pi, b1)
-        dGdP = np.concatenate(list(map(np.diag, self.rho * self.alloc_C))).T
-        while b1 <= b1_max:
-            # solve implicit equations
-            for i in range(n_iters):
-                D_next = self.get_D(Yi)
-                Pi, Yi = self.get_PYL_gibbs(D_next, Pi, Li, dGdP, beta, b1)
-                if i > 0:
-                    diff_D = D_next - D_prev
-                    norm_diff_D = np.max(abs(diff_D))
-                    if allowPrint2:
-                        print(f'i{i}\tnorm_diff_D:{norm_diff_D:.3e}')
-                    if norm_diff_D < D_tol and allowPrint2:
-                        print(f'tolerance achieved: \t norm_diff_D={norm_diff_D:.3e}')
-                        break
-                D_prev = D_next
-            b1 = b1 * b1_grow
-
-            Li, G = self.get_Li(Pi, b1)
-            dGdP = np.concatenate(list(map(np.diag, self.rho * self.alloc_C))).T
-            print(f'b1:{b1}\tG: {np.round(G,3)}\tLi:{np.round(Li,3)}')
-
-        return Pi, Yi, Li
-
 
     def anneal_DA(self, Y0, b_min, b_max, b_grow, n_iters, D_tol):
 
@@ -532,22 +477,6 @@ class FLP():
         return dH
 
 
-    # function to optimize free energy at given beta using trust-constr method
-    def optimize_trust_constr(self, x0, beta, xtol):
-        inequality_constraint = NonlinearConstraint(self.G_ineq, -np.inf, 0.0, jac=self.gradG)
-        equality_constraint = NonlinearConstraint(self.H_eq, 0.0, 0.0, jac=self.gradH)
-        F = lambda x, beta : self.F_gradF(x, beta)[0]
-        gradF = lambda x, beta : self.F_gradF(x, beta)[1]
-        res = minimize(
-            F, x0,
-            jac = gradF,
-            args=(beta,), 
-            method='trust-constr', 
-            constraints=[inequality_constraint, equality_constraint],
-            options={'verbose':0, 'xtol':xtol})
-        return res.x, res.fun
-
-
     # function to optimize free energy at given beta using SLSQP method
     def optimize_SLSQP(self, x0, beta, ftol):
         inequality_constraint = {'type':'ineq', 'fun':self.G_ineq, 'jac':self.gradG}
@@ -657,7 +586,6 @@ class FLP():
         return dxdt, F, dFdt
 
 
-
     # function to solve ode at given beta
     def optimize_SGF(self, x0, beta, alpha, kappa, T_f, dt_init=0.01, dt_min=1e-4, dt_max=0.1, Ftol=1e-2, xtol=1e-2, allowPrint=False):
         N = self.N
@@ -756,7 +684,7 @@ class FLP():
                 print(f'beta:{beta:.3e}\tF:{Fb:.3e}')
 
         return F_array, b_array, P_array, Y_array, t_compute_array, Cap_array
-
+        
     
 # function to plot FLP results
 def plot_flp(flp, res_means, Y_arr, P_arr, figSize):
