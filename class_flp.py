@@ -8,7 +8,6 @@ from scipy.optimize import NonlinearConstraint
 from scipy.optimize import minimize
 from scipy.integrate import solve_ivp
 from scipy.spatial.distance import cdist
-import testcases
 from utils import *
 import time
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
@@ -717,7 +716,7 @@ def plot_flp(flp, res_means, Y_arr, P_arr, figSize):
     # demand point means
     plt.scatter(res_means[:, 0], res_means[:, 1], marker = ".")
     # initial resource locations
-    plt.scatter(Y_init[:, 0], Y_init[:, 1], marker = "x", c=resource_colors, s=100, edgecolor='k', alpha=0.4, label='Initial Resource Locations')
+    plt.scatter(Y_init[:, 0], Y_init[:, 1], marker = "x", c=resource_colors, s=100, alpha=0.4, label='Initial Resource Locations')
     # final resource locations
     plt.scatter(Y_final[:, 0], Y_final[:, 1], c=resource_colors, marker = "*", s=200, edgecolor='yellow', label='Final Resource Positions')
     # centroid locations
@@ -747,9 +746,10 @@ def plot_flp(flp, res_means, Y_arr, P_arr, figSize):
 
 def plot_flp_with_capacity_1(flp, res_means, Y_arr, P_arr, 
                 x, data, min_vals, max_vals, figSize, fontSize, 
-                x_expand_factor, y_expand_factor, filedir, 
-                isSavePDF=False, inset_size=(1, 3), 
-                inset_loc=[0.79, 0.2, 0.1, 0.35], plotResTraj=False):
+                x_expand_factor, y_expand_factor, 
+                inset_size=(1, 3), 
+                inset_loc=[0.79, 0.2, 0.1, 0.35], 
+                plotResTraj=False):
     ''' 
     input - flp : class instance containing resource and facility data
             res_means, Y_arr, P_arr : arrays for resource means and trajectories
@@ -757,10 +757,10 @@ def plot_flp_with_capacity_1(flp, res_means, Y_arr, P_arr,
             figSize : main figure size
             fontSize : font size for labels
             inset_size : tuple defining the inset size (width, height) as a fraction of main plot
-            inset_loc : location of the inset ('upper right', 'lower left', etc.)
+            inset_loc : location of the inset
     output: None
     '''
-    
+
     # Extract common data
     N = flp.N
     M = flp.M
@@ -768,105 +768,63 @@ def plot_flp_with_capacity_1(flp, res_means, Y_arr, P_arr,
 
     # Generate colors for resources
     np.random.seed(4)
-    resource_colors = np.random.uniform(0,1,(M, 3))
-    resource_colors = resource_colors/resource_colors.sum(axis=1, keepdims=True)
+    resource_colors = np.random.uniform(0, 1, (M, 3))
+    resource_colors = resource_colors / resource_colors.sum(axis=1, keepdims=True)
 
-    # Extract solution specific data
+    # Extract solution-specific data
     Y_init = Y_arr[0]
     P_final = P_arr[-1]
     Y_final = Y_arr[-1]
-
-    # solution specific demand point colors
     data_colors = np.dot(P_final, resource_colors)
 
     # Create the main figure
     fig, ax = plt.subplots(figsize=figSize)
-    
+
     # Main scatter plot (facility locations)
     ax.scatter(resLoc[:, 0], resLoc[:, 1], marker="X", c=data_colors, edgecolor='white', s=600, alpha=0.3, label="Users")
-    ax.scatter(res_means[:, 0], res_means[:, 1], marker = ".")
+    ax.scatter(res_means[:, 0], res_means[:, 1], marker=".")
 
-    # Scatter for Y_final with labels
+    # Final resource positions
     ax.scatter(Y_final[:, 0], Y_final[:, 1], c=resource_colors, marker="s", s=1000, edgecolor='yellow', label='R final')
     for i in range(M):
-        ax.text(Y_final[i, 0], Y_final[i, 1], str(i), fontsize=fontSize*0.8, color='yellow', ha='center', va='center')
+        ax.text(Y_final[i, 0], Y_final[i, 1], str(i), fontsize=fontSize * 0.8, color='yellow', ha='center', va='center')
 
-    # Plot resource trajectories
+    # Resource trajectories and initial positions
     if plotResTraj:
-        # Scatter for Y_init with labels
         ax.scatter(Y_init[:, 0], Y_init[:, 1], marker=".", c=resource_colors, s=600, alpha=0.8, label='R initial')
-        # for i in range(M):
-        #     ax.text(Y_init[i, 0] + 0.2, Y_init[i, 1] + 0.2, str(i), fontsize=fontSize*0.8, color='black')
-        # centroid locations
+
         if len(Y_arr) > 1:
             Y_centroid = Y_arr[1]
-            plt.scatter(Y_centroid[:, 0], Y_centroid[:, 1], c=resource_colors, marker = "s", s=100, label=rf'R at $\beta={0.001}$')
+            ax.scatter(Y_centroid[:, 0], Y_centroid[:, 1], c=resource_colors, marker="s", s=100, label=r'R at $\beta={0.001}$')
 
         for i in range(M):
             ax.plot(Y_arr[:, i, 0], Y_arr[:, i, 1], linestyle="dotted", linewidth=2, color=resource_colors[i])
-            if i == M-1:
+            if i == M - 1:
                 ax.plot(Y_arr[:, i, 0], Y_arr[:, i, 1], label="R Trajectory", linestyle="dotted", linewidth=4, color=resource_colors[i])
 
-    # Expand x-axis limits to create room for the inset
+    # Expand x-axis limits for inset space
     xmin, xmax = ax.get_xlim()
     x_range = xmax - xmin
-    new_xmax = xmax + x_expand_factor * x_range  # Expand xmax by a fraction of x-range
-    ax.set_xlim(xmin, new_xmax)
-
-    # # Expand x-axis limits to create room for the inset
-    # ymin, ymax = ax.get_ylim()
-    # y_range = ymax - ymin
-    # newca_ymax = ymax + y_expand_factor * y_range  # Expand xmax by a fraction of x-range
-    # ax.set_xlim(ymin, new_ymax)
+    ax.set_xlim(xmin, xmax + x_expand_factor * x_range)
 
     # Format main plot
-    ax.legend(fontsize=0.7*fontSize, ncol=1, loc="upper right")
+    ax.legend(fontsize=0.7 * fontSize, ncol=1, loc="upper right")
     ax.tick_params(axis='both', labelsize=fontSize)
     ax.grid()
 
-    # Add an inset axes for the allocation cost plot (placed at bottom right)
+    # Add inset axes
     inset_ax = fig.add_axes(inset_loc)
-    # inset_ax = inset_axes(ax, width=inset_size[0], height=inset_size[1], loc=inset_loc)
-    
-    # "Transpose" the inset plot: Make the x-axis "Allocation Cost" and y-axis "Resource Index"
-    
-    # Plot bars for the min-max range (horizontal instead of vertical)
     for i in range(len(x)):
         inset_ax.barh(x[i], max_vals[i] - min_vals[i], left=min_vals[i], color='lightgray', height=0.2, alpha=1.0)
-    
-    # Scatter plot for actual data points (horizontal instead of vertical)
     inset_ax.scatter(data, x, color='black', marker='o', s=50, label='Final Allocation Cost')
-    
-    # Format inset plot
-    inset_ax.set_ylabel("R ID", fontsize=fontSize*0.8)  # Now y-axis represents resource index
+
+    # Format inset
+    inset_ax.set_ylabel("R ID", fontsize=fontSize * 0.8)
     inset_ax.set_yticks([i for i in range(flp.M)])
-    inset_ax.set_xlabel("U", fontsize=fontSize*0.8)  # Now x-axis represents allocation cost
-    inset_ax.tick_params(axis='both', labelsize=fontSize*0.8)
-    # inset_ax.legend(fontsize=fontSize*0.5)
+    inset_ax.set_xlabel("U", fontsize=fontSize * 0.8)
+    inset_ax.tick_params(axis='both', labelsize=fontSize * 0.8)
 
-
-    if isSavePDF:
-        fig.savefig(filedir, format="pdf")
-    
     plt.show()
 
-
-# def plot_data_with_shaded_region(x, data, min_vals, max_vals, figSize, fontSize):
-#     plt.figure(figsize=figSize)
-    
-#     # Plot bars for the min-max range at each index
-#     for i in range(len(x)):
-#         plt.bar(x[i], max_vals[i] - min_vals[i], bottom=min_vals[i], color='lightgray', width=0.5, alpha=0.8)
-    
-#     # Scatter plot for actual data points
-#     plt.scatter(x, data, color='red', marker='_', s=1000, label='Final Allocation Cost')
-    
-#     plt.xlabel("Resource Index", fontsize=fontSize*0.8)
-#     plt.ylabel("Allocation Cost", fontsize=fontSize*0.8)
-#     plt.xticks(fontsize=fontSize)
-#     plt.yticks(fontsize=fontSize)
-#     # plt.title("Data with Min-Max Range", fontsize=fontSize)
-#     plt.legend(fontsize=fontSize)
-#     plt.show()
 
 
