@@ -46,8 +46,8 @@ pip install numpy scipy matplotlib cvxpy
 
 Open the Jupyter notebooks:
 
-- `clustering_comparison.ipynb` — End-to-end example solving a problem with all methods
-- `clustering_compare_annealing.ipynb` — Compares performance at a fixed beta value
+- `clustering_compare_annealing.ipynb` — End-to-end example solving a problem with all methods
+- `clustering_comparison.ipynb` — Compares performance at a fixed beta value
 
 ---
 
