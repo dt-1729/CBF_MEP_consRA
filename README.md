@@ -1,10 +1,10 @@
 # CBF-Based Optimization for Constrained Resource Allocation
 
-This repository provides an implementation of a **control design approach to optimization** proposed in [our paper](https://arxiv.org/abs/2504.01378). The method is showcased for a broad class of **resource allocation problems that can be formulated as generalized facility location problems**, where the assignment costs and problem interpretations may vary depending on the application, but still adhere to capacity constraints, where control barrier functions (CBFs) are used to ensure feasibility while guiding the solution toward KKT points.
+This repository implements a **control design approach to optimization** proposed in [our paper](https://arxiv.org/abs/2504.01378). The method is showcased for a broad class of **resource allocation problems that can be formulated as generalized facility location problems (FLPs)**, where the assignment costs and problem interpretations may vary depending on the application, but still adhere to capacity constraints, where control barrier functions (CBFs) are used to ensure feasibility while guiding the solution toward KKT points.
 
-The repository includes an implementation of the **classical Deterministic Annealing (DA)** algorithm [Kenneth Rose, 1998](https://doi.org/10.1109/5.726788), which solves the unconstrained facility location problem based on the Maximum Entropy Principle (MEP).
+The repository includes an implementation of the **classical Deterministic Annealing (DA)** algorithm [Kenneth Rose, 1998](https://doi.org/10.1109/5.726788), which solves the unconstrained FLP based on the Maximum Entropy Principle (MEP).
 
-In our **MEP-based formulation** of constrained resource allocation, the algorithm requires solving an internal **constrained optimization problem** at each iteration. We compare our control-theoretic solution of this subproblem against several alternative approaches:
+In our **MEP-based formulation** of **constrained** FLP, the algorithm requires solving an internal **constrained optimization problem** at each iteration. We compare our control-theoretic solution of this subproblem against several alternative approaches:
 
 - **Penalty-based DA**, which incorporates inequality constraints through soft penalties [IEEE ICC, 2022](https://ieeexplore.ieee.org/abstract/document/10093253)
 - **Safe Gradient Flow (SGF)**, a method based on barrier-function-guided dynamics [TAC, 2022](https://doi.org/10.1109/TAC.2022.3200517)
