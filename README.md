@@ -15,12 +15,13 @@ For full methodology and problem formulation, please refer to the [paper](https:
 ## 📁 Repository Structure
 
 ```
-📦your-repo/
-├── class_flp.py               # Core FLP class: all methods for clustering, DA, SGF, CBF
+📦CBF_MEP_based_constrained_Resource_Allocation/
+├── class_flp.py               # Core FLP class: all methods for MEP-based FLP, including regular DA, CBF (our proposed approach), SGF, and penalty-based DA
 ├── utils.py                   # Helper functions: reshaping, projection, test case generation
-├── clustering_comparison.ipynb         # Solves one example using all methods, compares results
+├── clustering_comparison.ipynb         # Solves one example completely using all methods, compares results
 ├── clustering_compare_annealing.ipynb  # Compares methods at a fixed beta (annealing stage)
 ├── README.md                  # This file
+
 ```
 
 ---
