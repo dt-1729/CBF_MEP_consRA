@@ -42,7 +42,13 @@ Open the Jupyter notebooks:
 
 ---
 
-## 🧠 Methods Implemented
+## 🧠 Methods Implemented & Visualized
+
+This repository implements and compares several methods for solving constrained facility location problems. Each approach is tested across a range of β values using our MEP-based formulation. The animation below visualizes how the solutions evolve for each method during the annealing process:
+
+> 🎥 *Watch how each method updates resource positions and respects constraints as β increases:*
+
+![Solution Animation](https://user-images.githubusercontent.com/your-username/path-to-animation.gif)
 
 | Method                       | Description                                                                                                                                                                                                                                                           |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
