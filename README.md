@@ -46,9 +46,9 @@ Open the Jupyter notebooks:
 
 This repository implements and compares several methods for solving constrained facility location problems. The animation below visualizes how the solutions evolve with beta for each approach during the annealing process:
 
-> 🎥 *Watch how each method updates resource positions and respects constraints as β increases:*
+> 🎥 *Watch how each method updates resource positions and respects constraints as β increases (annealing):*
 
-<video src="solution_comparison.mp4" controls autoplay loop style="width:100%; max-width:900px; margin-top:10px;"></video>
+![Solution Animation](solution_comparison%20(1).gif)
 
 | Method                       | Description                                                                                                                                                                                                                                                           |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
