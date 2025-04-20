@@ -54,7 +54,7 @@ Open the Jupyter notebooks:
 
 ---
 
-> 🎥 **Solution evolution across methods during annealing:**
+> 🎥 **Solution evolution during annealing across different methods:**
 
 ![Solution Animation](solution_comparison%20(1).gif)
 
