@@ -1,6 +1,6 @@
 # CBF-Based Optimization for Constrained Resource Allocation
 
-This repository implements the **control-theoretic optimization framework** proposed in [our paper](https://arxiv.org/abs/2504.01378), targeting a class of **constrained resource allocation problems** modeled as generalized **facility location problems (FLPs)**. The method uses **Control Barrier Functions (CBFs)** and **Control Lyapunov Function (CLF)** to ensure constraint satisfaction and convergence to KKT points.
+This repository implements the **control-theoretic optimization framework** proposed in [our paper](https://arxiv.org/abs/2504.01378), targeting a class of **constrained resource allocation problems** modeled as generalized **facility location problems (FLPs)**. The method uses **Control Barrier Functions (CBFs)** and a **Control Lyapunov Function (CLF)** to ensure constraint satisfaction and convergence to KKT points.
 
 We also include the **classical Deterministic Annealing (DA)** [Rose, 1998](https://doi.org/10.1109/5.726788) for the unconstrained case, and compare our CBF-based approach with:
 
