@@ -18,10 +18,9 @@ For full methodology and problem formulation, please refer to the [paper](https:
 📦CBF_MEP_based_constrained_Resource_Allocation/
 ├── class_flp.py               # Core FLP class: all methods for MEP-based FLP, including regular DA, CBF (our proposed approach), SGF, and penalty-based DA
 ├── utils.py                   # Helper functions: reshaping, projection, test case generation
-├── clustering_comparison.ipynb         # Solves one example completely using all methods, compares results
-├── clustering_compare_annealing.ipynb  # Compares methods at a fixed beta (annealing stage)
+├── clustering_compare_annealing.ipynb  # Solves one example completely using all methods, compares results
+├── clustering_comparison.ipynb         # Compares methods at a fixed beta (annealing stage)
 ├── README.md                  # This file
-
 ```
 
 ---
@@ -38,8 +37,8 @@ pip install numpy scipy matplotlib cvxpy
 
 Open the Jupyter notebooks:
 
-- `clustering_comparison.ipynb` — End-to-end example solving a problem with all methods
-- `clustering_compare_annealing.ipynb` — Compares performance at a fixed beta value
+- `clustering_compare_annealing.ipynb` — End-to-end example solving a problem with all methods
+- `clustering_comparison.ipynb` — Compares performance at a fixed beta value
 
 ---
 
@@ -59,7 +58,7 @@ Open the Jupyter notebooks:
 
 If you use this codebase in your work, please cite:
 
-> Alisina Bayati and Dhananjay Tiwary. *"A Control Barrier Function Approach to Constrained Resource Allocation Problems."* arXiv preprint, 2024. [[arXiv:2504.01378\]](https://arxiv.org/abs/2504.01378)
+> Alisina Bayati and Dhananjay Tiwary. *"A Control Barrier Function Approach to Constrained Resource Allocation Problems."* arXiv preprint, 2024. [[arXiv:2504.01378]](https://arxiv.org/abs/2504.01378)
 
 ---
 
@@ -72,8 +71,10 @@ If you use this codebase in your work, please cite:
 
 ## 📜 License
 
-MIT License\
+MIT License  
 © 2025 Dhananjay Tiwary (dt-1729) and Alisina Bayati (alisina75)
+
+
 
 
 
