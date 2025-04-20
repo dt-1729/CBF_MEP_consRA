@@ -1,4 +1,4 @@
-# CBF-Based Optimization for Constrained Resource Allocation
+# A Control Barrier Function Approach to Constrained Resource Allocation Problems in a Maximum Entropy Principle Framework
 
 This repository implements the **control-theoretic optimization framework** proposed in [our paper](https://arxiv.org/abs/2504.01378), targeting a class of **constrained resource allocation problems** modeled as generalized **facility location problems (FLPs)**. The method uses **Control Barrier Functions (CBFs)** and a **Control Lyapunov Function (CLF)** to ensure constraint satisfaction and convergence to KKT points.
 
