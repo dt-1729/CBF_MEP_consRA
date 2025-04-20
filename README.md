@@ -44,9 +44,6 @@ Open the Jupyter notebooks:
 
 ## 🧠 Methods Implemented & Visualized
 
-This repository implements and compares several methods for solving **constrained facility location problems**. The animation below illustrates how the solution of each method evolves as β increases during the annealing process:
-
-
 | Method                       | Description                                                                                                                                                                                                                                                           |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **CBF-based (proposed)**     | Designs a control system over the optimization variable that guarantees convergence to a KKT point while satisfying constraints throughout. [[Paper](https://arxiv.org/abs/2504.01378)]                                                                               |
@@ -57,7 +54,7 @@ This repository implements and compares several methods for solving **constraine
 
 ---
 
-> 🎥 **Solution evolution during annealing:**
+> 🎥 **Solution evolution across methods during annealing:**
 
 ![Solution Animation](solution_comparison%20(1).gif)
 
