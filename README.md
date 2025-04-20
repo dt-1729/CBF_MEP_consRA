@@ -46,9 +46,6 @@ Open the Jupyter notebooks:
 
 This repository implements and compares several methods for solving constrained facility location problems. The animation below visualizes how the solutions evolve with beta for each approach during the annealing process:
 
-> 🎥 *Watch how each method updates resource positions and respects constraints as β increases (annealing):*
-
-![Solution Animation](solution_comparison%20(1).gif)
 
 | Method                       | Description                                                                                                                                                                                                                                                           |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -56,7 +53,11 @@ This repository implements and compares several methods for solving constrained 
 | **Penalty DA**               | Introduces constraint penalties into deterministic annealing. Based on: *"Inequality Constraints in Facility Location and Related Problems," IEEE ICC, 2022*. [[Paper](https://ieeexplore.ieee.org/abstract/document/10093253)]                                       |
 | **Classical DA**             | Unconstrained deterministic annealing for clustering. Based on: *Kenneth Rose, "Deterministic Annealing for Clustering...," Proc. IEEE, 1998*. [[Paper](https://doi.org/10.1109/5.726788)]                                                                            |
 | **SGF (Safe Gradient Flow)** | Gradient-based control using barrier functions to enforce constraints. Based on: *Allibhoy & Cortés, "Control-Barrier-Function-Based Design of Gradient Flows for Constrained Nonlinear Programming," TAC, 2022*. [[Paper](https://doi.org/10.1109/TAC.2022.3200517)] |
-| **SLSQP (SciPy)**            | Standard constrained optimization using `scipy.optimize.minimize(method='SLSQP')`. [[Docs](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)]                                                                                        |
+| **SLSQP (SciPy)**            | Standard constrained optimization using `scipy.optimize.minimize(method='SLSQP')`. [[Docs](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)]    
+
+> 🎥 *Watch how each method updates resource positions and respects constraints as β increases (annealing):*
+
+![Solution Animation](solution_comparison%20(1).gif)|
 
 ---
 
