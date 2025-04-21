@@ -49,7 +49,7 @@ Open the Jupyter notebooks:
 | **CBF-based (proposed)**     | Designs a control system over the optimization variable that guarantees convergence to a KKT point while satisfying constraints throughout. [[Paper](https://arxiv.org/abs/2504.01378)]                                                                               |
 | **Penalty DA**               | Introduces constraint penalties into deterministic annealing. Based on: *"Inequality Constraints in Facility Location and Related Problems," IEEE ICC, 2022*. [[Paper](https://ieeexplore.ieee.org/abstract/document/10093253)]                                       |
 | **Classical DA**             | Unconstrained deterministic annealing for clustering. Based on: *Kenneth Rose, "Deterministic Annealing for Clustering...," Proc. IEEE, 1998*. [[Paper](https://doi.org/10.1109/5.726788)]                                                                            |
-| **SGF (Safe Gradient Flow)** | Gradient-based control using barrier functions to enforce constraints. Based on: *Allibhoy & Cortés, "Control-Barrier-Function-Based Design of Gradient Flows for Constrained Nonlinear Programming," TAC, 2022*. [[Paper](https://doi.org/10.1109/TAC.2022.3200517)] |
+| **SGF (Safe Gradient Flow)** | Gradient-based control using barrier functions to enforce constraints. Based on: *Allibhoy & Cortés, "Control-Barrier-Function-Based Design of Gradient Flows for Constrained Nonlinear Programming," TAC, 2022*. [[Paper](https://ieeexplore.ieee.org/document/10224270)] |
 | **SLSQP (SciPy)**            | Standard constrained optimization using `scipy.optimize.minimize(method='SLSQP')`. [[Docs](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.minimize.html)]    
 
 ---
