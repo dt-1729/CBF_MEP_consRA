@@ -57,7 +57,7 @@ Open the Jupyter notebooks:
 > 🎥 **Solution evolution during annealing across different methods:**  
 > (See `files/time_vs_cost_comparison.pdf` for cost and time comparisons.)
 
-![Solution Animation](files/solution_comparison%20(1).gif)
+![Solution Animation](files/solution_comparison_loop.gif)
 
 
 ---
