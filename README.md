@@ -66,8 +66,17 @@ Open the Jupyter notebooks:
 
 If you use this codebase in your work, please cite:
 
-> Alisina Bayati and Dhananjay Tiwary. *"A Control Barrier Function Approach to Constrained Resource Allocation Problems in a Maximum Entropy Principle Framework."* arXiv preprint, 2024. [[arXiv:2504.01378]](https://arxiv.org/abs/2504.01378)
-
+```
+@misc{bayati2025controlbarrierfunctionapproach,
+      title={A Control Barrier Function Approach to Constrained Resource Allocation Problems in a Maximum Entropy Principle Framework}, 
+      author={Alisina Bayati and Dhananjay Tiwari and Srinivasa Salapaka},
+      year={2025},
+      eprint={2504.01378},
+      archivePrefix={arXiv},
+      primaryClass={math.OC},
+      url={https://arxiv.org/abs/2504.01378}, 
+}
+```
 ---
 
 ## 👨‍💻 Authors
