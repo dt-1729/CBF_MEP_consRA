@@ -809,8 +809,9 @@ def plot_flp_with_capacity_1(flp, res_means, Y_arr, P_arr,
 
     # Format main plot
     ax.legend(fontsize=0.7 * fontSize, ncol=1, loc="upper right")
-    ax.tick_params(axis='both', labelsize=fontSize)
-    ax.grid()
+    # ax.tick_params(axis='both', labelsize=fontSize)
+    ax.tick_params(axis='both', which='both', bottom=False, top=False, left=False, right=False, labelbottom=False, labelleft=False)
+    # ax.grid()
 
     # Add inset axes
     inset_ax = fig.add_axes(inset_loc)
