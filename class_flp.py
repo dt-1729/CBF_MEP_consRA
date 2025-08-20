@@ -11,7 +11,7 @@ from scipy.spatial.distance import cdist
 from utils import *
 import time
 from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-
+import math
 
 # create FLP class and its associated functions
 class FLP():
@@ -827,5 +827,101 @@ def plot_flp_with_capacity_1(flp, res_means, Y_arr, P_arr,
 
     plt.show()
 
+def plot_flp_sol_instances(
+    solution_instances, 
+    fontSize, 
+    figSize,
+    plotResTraj=False
+    ):
+    ''' 
+    input - solution_instances : solution instance data of multiple flp scenarios
+            fontSize : font size for labels
+            figSize : main figure size
+    output: None
+    '''
+
+    n = len(solution_instances)
+
+    # Decide subplot grid size (square-ish layout)
+    cols = math.ceil(math.sqrt(n))
+    rows = math.ceil(n / cols)
+
+    fig, axes = plt.subplots(rows, cols, figsize=figSize)
+
+    # Flatten axes for easy iteration (in case of single row/col, make it iterable)
+    axes = axes.flatten()
+
+    for i, sol in enumerate(solution_instances):
+        # Extract data
+        flp = solution_instances[i]['flp']
+        Y_arr = solution_instances[i]['Y_arr']
+        P_arr = solution_instances[i]['P_arr']
+        F_arr = solution_instances[i]['F_arr']
+        runtime = solution_instances[i]['runtime']
+        N = flp.N
+        M = flp.M
+        resLoc = flp.resLoc
+        Y_init = Y_arr[0]
+        P_final = P_arr[-1]
+        Y_final = Y_arr[-1]
+        final_cost = F_arr[-1]
+
+        # Generate colors for resources
+        np.random.seed(4)
+        resource_colors = np.random.uniform(0, 1, (M, 3))
+        resource_colors = resource_colors / resource_colors.sum(axis=1, keepdims=True)
+        data_colors = np.dot(P_final, resource_colors)
 
 
+        # Main scatter plot (facility locations)
+        axes[i].scatter(resLoc[:, 0], resLoc[:, 1], marker="X", c=data_colors, edgecolor='white', s=600, alpha=0.3, label="Users")
+        # axes[i].scatter(res_means[:, 0], res_means[:, 1], marker=".")
+        
+        # Final resource positions
+        axes[i].scatter(Y_final[:, 0], Y_final[:, 1], c=resource_colors, marker="s", s=700, edgecolor='yellow', label='R final')
+        for m in range(M):
+            axes[i].text(Y_final[m, 0], Y_final[m, 1], str(m), fontsize=fontSize * 0.8, color='yellow', ha='center', va='center')
+
+        # Resource trajectories and initial positions
+        if plotResTraj:
+            axes[i].scatter(Y_init[:, 0], Y_init[:, 1], marker=".", c=resource_colors, s=600, alpha=0.8, label='R initial')
+
+            if len(Y_arr) > 1:
+                Y_centroid = Y_arr[1]
+                axes[i].scatter(Y_centroid[:, 0], Y_centroid[:, 1], c=resource_colors, marker="s", s=100, label=r'R at $\beta={0.001}$')
+
+            for m in range(M):
+                axes[i].plot(Y_arr[:, m, 0], Y_arr[:, m, 1], linestyle="dotted", linewidth=2, color=resource_colors[m])
+                if m == M - 1:
+                    # print(i, m, M, Y_arr.shape)
+                    axes[i].plot(Y_arr[:, m, 0], Y_arr[:, m, 1], label="R Trajectory", linestyle="dotted", linewidth=4, color=resource_colors[m])
+
+        # turn off the axes labels and ticks
+        axes[i].set_xticks([])
+        axes[i].set_yticks([])
+
+        #  # Add runtime and cost text in bottom-left corner
+        # axes[i].text(0.02, 0.95,
+        #             f"Runtime: {runtime:.2f}s\nCost: {final_cost:.2f}",
+        #             transform=axes[i].transAxes,
+        #             fontsize=fontSize,
+        #             color="white",
+        #             ha="left", va="top",
+        #             bbox=dict(facecolor="black", alpha=0.5, boxstyle="round"))
+
+        # Try placing text in top-right; if crowded, adjust with offset
+        axes[i].annotate(
+            f"D={final_cost:.2f}, T={runtime:.2f}s",
+            xy=(1, 1), xycoords='axes fraction',   # corner
+            xytext=(-10, -10), textcoords='offset points',
+            ha='right', va='top',
+            fontsize=fontSize,
+            bbox=dict(facecolor="white", alpha=0.7, edgecolor="none")
+        )
+
+    # Hide any unused subplots
+    for j in range(i+1, len(axes)):
+        axes[j].axis("off")
+
+    plt.tight_layout()
+    plt.show()

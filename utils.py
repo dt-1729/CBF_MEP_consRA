@@ -68,7 +68,15 @@ def project_to_stochastic_matrix(matrix):
     projected_matrix = np.apply_along_axis(project_to_triangle, axis=1, arr=matrix)
     return projected_matrix
 
-def generate_testcase(N, M, d, cluster_cov, seed=0, sq_size=20, unif_split=True, normalizer=False):
+def generate_testcase(
+    N, 
+    M, 
+    d, 
+    cluster_cov, 
+    seed=0, 
+    sq_size=20, 
+    unif_split=True, 
+    normalizer=False):
     # seed for reproducibility
     np.random.seed(seed)
     # cluster means and covariances
@@ -101,3 +109,38 @@ def generate_testcase(N, M, d, cluster_cov, seed=0, sq_size=20, unif_split=True,
         normalizer = 1.0
 
     return resLoc/normalizer, facLoc/normalizer, res_mean/normalizer, split_pct, rho
+
+# def generate_multiple_testcases( 
+#     N_range, 
+#     M_range, 
+#     cluster_cov_range, 
+#     sq_size, 
+#     d=2, 
+#     normalizer=False):
+
+#     for N, M, cov in zip(N_range, M_range, cluster_cov_range):
+#         testcase = {}
+#         X, Y0, Xm, split_pct, rho = generate_testcase(
+#             N, 
+#             M, 
+#             d, 
+#             cluster_cov, 
+#             seed=0, 
+#             sq_size=sq_size, 
+#             unif_split=unif_split,
+#             normalizer=normalizer)
+
+#         alloc_cost = np.random.uniform(1,1,(N,M))
+#         mean_alloc_cost = np.mean(alloc_cost)
+#         C = np.random.uniform(0.3,1,len(split_pct))
+#         # C = np.ones(shape=split_pct.shape)
+#         C = (C/np.sum(C) + 0.02) * mean_alloc_cost
+#         B = np.random.uniform(C.min()*0.3, C.min()*0.6, len(split_pct))
+        
+#         testcase = {
+#             'X':X, 
+#             'Y0':Y0,
+#             'Xm':Xm,
+#             'split_pct':split_pct,
+#             'rho':rho
+#         }
