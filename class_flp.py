@@ -846,13 +846,17 @@ def plot_flp_sol_instances(
     cols = math.ceil(math.sqrt(n))
     rows = math.ceil(n / cols)
 
-    fig, axes = plt.subplots(rows, cols, figsize=figSize)
+    fig, axes = plt.subplots(rows, cols, figsize=(figSize[0]*cols, figSize[1]*rows))
 
-    # Flatten axes for easy iteration (in case of single row/col, make it iterable)
-    axes = axes.flatten()
+    # Ensure axes is always a flat array
+    if n == 1:
+        axes = np.array([axes])  # wrap single Axes into an array
+    else:
+        axes = axes.flatten()
 
     for i, sol in enumerate(solution_instances):
         # Extract data
+        M_name = solution_instances[i]['M_name']
         flp = solution_instances[i]['flp']
         Y_arr = solution_instances[i]['Y_arr']
         P_arr = solution_instances[i]['P_arr']
