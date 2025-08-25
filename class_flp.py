@@ -831,7 +831,9 @@ def plot_flp_sol_instances(
     solution_instances, 
     fontSize, 
     figSize,
-    plotResTraj=False
+    savefig_opts,
+    plotResTraj=False,
+    plotCapacities=True
     ):
     ''' 
     input - solution_instances : solution instance data of multiple flp scenarios
@@ -857,18 +859,22 @@ def plot_flp_sol_instances(
     for i, sol in enumerate(solution_instances):
         # Extract data
         M_name = solution_instances[i]['M_name']
-        flp = solution_instances[i]['flp']
+        # flp = solution_instances[i]['flp']
         Y_arr = solution_instances[i]['Y_arr']
         P_arr = solution_instances[i]['P_arr']
         F_arr = solution_instances[i]['F_arr']
         runtime = solution_instances[i]['runtime']
-        N = flp.N
-        M = flp.M
-        resLoc = flp.resLoc
+        cap_arr = solution_instances[i]['cap_arr']
+        N = solution_instances[i]['n_resources']
+        M = solution_instances[i]['n_facilities']
+        max_vals = solution_instances[i]['upper_capacity']
+        min_vals = solution_instances[i]['lower_capacity']
+        resLoc = solution_instances[i]['resource_locs']
         Y_init = Y_arr[0]
         P_final = P_arr[-1]
         Y_final = Y_arr[-1]
         final_cost = F_arr[-1]
+        final_cap = cap_arr[-1]
 
         # Generate colors for resources
         np.random.seed(4)
@@ -876,13 +882,12 @@ def plot_flp_sol_instances(
         resource_colors = resource_colors / resource_colors.sum(axis=1, keepdims=True)
         data_colors = np.dot(P_final, resource_colors)
 
-
         # Main scatter plot (facility locations)
         axes[i].scatter(resLoc[:, 0], resLoc[:, 1], marker="X", c=data_colors, edgecolor='white', s=600, alpha=0.3, label="Users")
         # axes[i].scatter(res_means[:, 0], res_means[:, 1], marker=".")
         
         # Final resource positions
-        axes[i].scatter(Y_final[:, 0], Y_final[:, 1], c=resource_colors, marker="s", s=700, edgecolor='yellow', label='R final')
+        axes[i].scatter(Y_final[:, 0], Y_final[:, 1], c=resource_colors, marker="s", s=500, edgecolor='yellow', label='R final')
         for m in range(M):
             axes[i].text(Y_final[m, 0], Y_final[m, 1], str(m), fontsize=fontSize * 0.8, color='yellow', ha='center', va='center')
 
@@ -904,28 +909,54 @@ def plot_flp_sol_instances(
         axes[i].set_xticks([])
         axes[i].set_yticks([])
 
-        #  # Add runtime and cost text in bottom-left corner
-        # axes[i].text(0.02, 0.95,
-        #             f"Runtime: {runtime:.2f}s\nCost: {final_cost:.2f}",
-        #             transform=axes[i].transAxes,
-        #             fontsize=fontSize,
-        #             color="white",
-        #             ha="left", va="top",
-        #             bbox=dict(facecolor="black", alpha=0.5, boxstyle="round"))
-
         # Try placing text in top-right; if crowded, adjust with offset
         axes[i].annotate(
-            f"D={final_cost:.2f}, T={runtime:.2f}s",
+            f"{M_name}, D={final_cost:.2f}, T={runtime:.2f}s",
             xy=(1, 1), xycoords='axes fraction',   # corner
-            xytext=(-10, -10), textcoords='offset points',
+            xytext=(-10, -220), textcoords='offset points',
             ha='right', va='top',
             fontsize=fontSize,
-            bbox=dict(facecolor="white", alpha=0.7, edgecolor="none")
+            bbox=dict(facecolor="white", alpha=0.7, edgecolor="black")
         )
+
+        if plotCapacities:
+            # Expand x-axis limits for inset space
+            xmin, xmax = axes[i].get_xlim()
+            x_expand_factor, y_expand_factor = 0.8, 0.0
+            x = np.arange(M)
+            x_range = xmax - xmin
+            axes[i].set_xlim(xmin, xmax + x_expand_factor * x_range)
+
+            inset_ax = inset_axes(
+                axes[i],
+                width="100%",
+                height="100%",
+                loc="upper left",
+                bbox_to_anchor=(0.65, 0.35, 0.32, 0.62), # x0, y0, width, height (in axis coords)
+                bbox_transform=axes[i].transAxes      # interpret bbox in axis coordinates
+            )
+
+            # Plot inside inset
+            for j in range(len(x)):
+                inset_ax.barh(x[j], max_vals[j] - min_vals[j],
+                            left=min_vals[j], color='lightgray', height=0.2, alpha=1.0)
+            inset_ax.scatter(final_cap, x, color='black', marker='o', s=50, label='Final Allocation Cost')
+
+            # Format inset
+            inset_ax.set_ylabel("R ID", fontsize=fontSize * 0.8)
+            inset_ax.set_yticks([j for j in range(M)])
+            inset_ax.set_xlabel("U", fontsize=fontSize * 0.8)
+            inset_ax.tick_params(axis='both', labelsize=fontSize * 0.8)
 
     # Hide any unused subplots
     for j in range(i+1, len(axes)):
         axes[j].axis("off")
+
+    if savefig_opts['savefig'] == True:
+        instant = savefig_opts['instant_id']
+        filename = savefig_opts['filename']
+        extent = axes[instant].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+        fig.savefig(filename, bbox_inches=extent)
 
     plt.tight_layout()
     plt.show()

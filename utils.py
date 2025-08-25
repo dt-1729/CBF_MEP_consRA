@@ -86,8 +86,7 @@ def generate_testcase(
     if unif_split:
         split_pct = np.ones(M)
     else:
-        split_pct = np.random.uniform(0.01,2,M)    
-        # split_pct = np.array([0.2, 0.3, 0.5])
+        split_pct = np.random.uniform(0.01, 2, M)    
     split_pct = split_pct/split_pct.sum()
 
     resLoc = np.zeros([N, d]) # initialize resource locations
