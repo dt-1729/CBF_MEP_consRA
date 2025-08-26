@@ -913,7 +913,7 @@ def plot_flp_sol_instances(
         axes[i].annotate(
             f"{M_name}, D={final_cost:.2f}, T={runtime:.2f}s",
             xy=(1, 1), xycoords='axes fraction',   # corner
-            xytext=(-10, -220), textcoords='offset points',
+            xytext=(-10, -200), textcoords='offset points',
             ha='right', va='top',
             fontsize=fontSize,
             bbox=dict(facecolor="white", alpha=0.7, edgecolor="black")
@@ -953,10 +953,9 @@ def plot_flp_sol_instances(
         axes[j].axis("off")
 
     if savefig_opts['savefig'] == True:
-        instant = savefig_opts['instant_id']
         filename = savefig_opts['filename']
-        extent = axes[instant].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-        fig.savefig(filename, bbox_inches=extent)
+        fig.savefig(filename, bbox_inches='tight')
+
 
     plt.tight_layout()
     plt.show()
