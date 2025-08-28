@@ -832,6 +832,8 @@ def plot_flp_sol_instances(
     fontSize, 
     figSize,
     savefig_opts,
+    inset_coords,
+    text_coords,
     plotResTraj=False,
     plotCapacities=True
     ):
@@ -877,13 +879,13 @@ def plot_flp_sol_instances(
         final_cap = cap_arr[-1]
 
         # Generate colors for resources
-        np.random.seed(4)
+        np.random.seed(10)
         resource_colors = np.random.uniform(0, 1, (M, 3))
         resource_colors = resource_colors / resource_colors.sum(axis=1, keepdims=True)
         data_colors = np.dot(P_final, resource_colors)
 
         # Main scatter plot (facility locations)
-        axes[i].scatter(resLoc[:, 0], resLoc[:, 1], marker="X", c=data_colors, edgecolor='white', s=600, alpha=0.3, label="Users")
+        axes[i].scatter(resLoc[:, 0], resLoc[:, 1], marker="X", c=data_colors, edgecolor='white', s=500, alpha=0.3, label="Users")
         # axes[i].scatter(res_means[:, 0], res_means[:, 1], marker=".")
         
         # Final resource positions
@@ -913,7 +915,7 @@ def plot_flp_sol_instances(
         axes[i].annotate(
             f"{M_name}, D={final_cost:.2f}, T={runtime:.2f}s",
             xy=(1, 1), xycoords='axes fraction',   # corner
-            xytext=(-10, -200), textcoords='offset points',
+            xytext=text_coords, textcoords='offset points',
             ha='right', va='top',
             fontsize=fontSize,
             bbox=dict(facecolor="white", alpha=0.7, edgecolor="black")
@@ -932,7 +934,7 @@ def plot_flp_sol_instances(
                 width="100%",
                 height="100%",
                 loc="upper left",
-                bbox_to_anchor=(0.65, 0.35, 0.32, 0.62), # x0, y0, width, height (in axis coords)
+                bbox_to_anchor=inset_coords, # x0, y0, width, height (in axis coords)
                 bbox_transform=axes[i].transAxes      # interpret bbox in axis coordinates
             )
 
